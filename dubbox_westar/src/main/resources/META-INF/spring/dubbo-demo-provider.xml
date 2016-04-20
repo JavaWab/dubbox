@@ -20,9 +20,17 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <dubbo:application name="dubbox_westar_api" owner="wangab" organization="wangab"/>
+    <dubbo:application name="dubboxwestarapi" owner="wangab" organization="wangab"/>
     <dubbo:registry address="zookeeper://192.168.22.104:2181" />
-    <dubbo:protocol name="rest" port="99909" contextpath="/api" serialization="kryo" extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter" threads="500" />
-    <dubbo:service interface="com.westar.fastdfs.wangab.api.IUserService" ref="" version="1.0.0" />
-    <bean id="" class="" />
+    <!--<dubbo:annotation package="com.westar.wangab.api.impl" id="an" />-->
+
+    <!--<dubbo:protocol name="rest" port="9908" contextpath="fileApi" server="tomcat" extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter" threads="500" />-->
+    <dubbo:protocol name="rest" port="9909" contextpath="userApi" server="servlet" serialization="kryo" extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter" threads="500" />
+
+    <dubbo:service interface="com.westar.wangab.api.intf.IUserService" ref="userService" version="1.0.0" validation="true" protocol="rest" />
+    <!--<dubbo:service interface="com.westar.wangab.api.intf.IFileService" ref="fileService" version="1.0.0" validation="true" protocol="rest" />-->
+
+    <bean id="userService" class="com.westar.wangab.api.impl.user.UserService" />
+    <!--<bean id="fileService" class="com.westar.wangab.api.impl.files.FileService" />-->
+
 </beans>

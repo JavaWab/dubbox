@@ -30,10 +30,11 @@ public class ClientGlobal
 	public static boolean g_anti_steal_token;  //if anti-steal token
 	public static String g_secret_key;   //generage token secret key
 	public static TrackerGroup g_tracker_group;
-	
+	public static String g_base_url_prefixes;
+
 	public static final int DEFAULT_CONNECT_TIMEOUT = 5;  //second
 	public static final int DEFAULT_NETWORK_TIMEOUT = 30; //second
-	
+
 	private ClientGlobal()
 	{
 	}
@@ -69,6 +70,10 @@ public class ClientGlobal
   		{
   			g_charset = "ISO8859-1";
   		}
+		g_base_url_prefixes = iniReader.getStrValue("base_prefixes");
+		if(g_base_url_prefixes == null || g_base_url_prefixes.length() == 0){
+			g_base_url_prefixes = "http://127.0.0.1";
+		}
   		
   		szTrackerServers = iniReader.getValues("tracker_server");
   		if (szTrackerServers == null)
@@ -197,5 +202,13 @@ public class ClientGlobal
 	public static void setG_tracker_group(TrackerGroup tracker_group)
 	{
 		ClientGlobal.g_tracker_group = tracker_group;
+	}
+
+	public static String getG_base_url_prefixes() {
+		return g_base_url_prefixes;
+	}
+
+	public static void setG_base_url_prefixes(String g_base_url_prefixes) {
+		ClientGlobal.g_base_url_prefixes = g_base_url_prefixes;
 	}
 }
