@@ -32,5 +32,4 @@
 
     <bean id="userService" class="com.westar.wangab.api.impl.user.UserService" />
     <!--<bean id="fileService" class="com.westar.wangab.api.impl.files.FileService" />-->
-
 </beans>
