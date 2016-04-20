@@ -44,6 +44,5 @@ public class Test1
 		{
 			ex.printStackTrace();
 		}
-	
 	}
 }
