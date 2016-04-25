@@ -34,8 +34,8 @@
         <property name="threadsAllowedToBlockForConnectionMultiplier" value="80"></property>
     </bean>
     <bean id="serveraddr" class="com.mongodb.ServerAddress">
-        <constructor-arg name="host" value="${mongodb.host}"></constructor-arg>
-        <constructor-arg name="port" value="${mongodb.port}"></constructor-arg>
+        <constructor-arg name="host" value="127.0.0.1"></constructor-arg>
+        <constructor-arg name="port" value="27017"></constructor-arg>
     </bean>
     <bean id="mongo" class="com.mongodb.Mongo">
         <constructor-arg name="options">

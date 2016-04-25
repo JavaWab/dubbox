@@ -21,7 +21,7 @@
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <dubbo:application name="dubboxwestarapi" owner="wangab" organization="wangab"/>
-    <dubbo:registry address="zookeeper://192.168.22.104:2181" />
+    <dubbo:registry address="zookeeper://127.0.0.1:2181" />
     <!--<dubbo:annotation package="com.westar.wangab.api.impl" id="an" />-->
 
     <!--<dubbo:protocol name="rest" port="9908" contextpath="fileApi" server="tomcat" extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter" threads="500" />-->
