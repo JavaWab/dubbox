@@ -51,10 +51,13 @@ public class FileService implements IFileService {
         final JSONObject jsonObject = JSON.parseObject(param.getExtInfo());
         String effect = jsonObject.getString("effect");
         final String userid = jsonObject.getString("uid");
+        Map<String, Object> map = null;
         DBCollection collection = mongo.getDB("westar").getCollection("ws_user_file");;
         if(effect != null && userid != null){
             if("mkicon".equals(effect)){
                 collection = mongo.getDB("westar").getCollection("ws_user_mkicon");
+            }else if("mkphoto".equals(effect)){
+                collection = mongo.getDB("westar").getCollection("ws_user_mkphoto");
             }else if("icon".equals(effect)){
                 collection = mongo.getDB("westar").getCollection("ws_user_icon");
             }else if("photo".equals(effect)){
