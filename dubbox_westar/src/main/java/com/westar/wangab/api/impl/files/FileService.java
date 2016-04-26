@@ -51,31 +51,42 @@ public class FileService implements IFileService {
         final JSONObject jsonObject = JSON.parseObject(param.getExtInfo());
         String effect = jsonObject.getString("effect");
         final String userid = jsonObject.getString("uid");
-        Map<String, Object> map = null;
-        DBCollection collection = mongo.getDB("westar").getCollection("ws_user_file");;
+        final String cardid = jsonObject.getString("cid");
+
+        DBCollection collection = mongo.getDB("westar").getCollection("ws_user_file");
+        final Map<String, Object> collections = new HashMap<String, Object>();
         if(effect != null && userid != null){
             if("mkicon".equals(effect)){
                 collection = mongo.getDB("westar").getCollection("ws_user_mkicon");
+                collections.put("ext", "mk");
+                collections.put("collection", collection);
             }else if("mkphoto".equals(effect)){
                 collection = mongo.getDB("westar").getCollection("ws_user_mkphoto");
+                collections.put("ext", "mk");
+                collections.put("collection", collection);
             }else if("icon".equals(effect)){
                 collection = mongo.getDB("westar").getCollection("ws_user_icon");
+                collections.put("ext", "usr");
+                collections.put("collection", collection);
             }else if("photo".equals(effect)){
                 collection = mongo.getDB("westar").getCollection("ws_user_photo");
+                collections.put("ext", "usr");
+                collections.put("collection", collection);
             }else if("file".equals(effect)){
                 collection = mongo.getDB("westar").getCollection("ws_user_file");
+                collections.put("ext", "usr");
+                collections.put("collection", collection);
             }
         }else{
             Map map = new HashMap();
             map.put("errormsg", "RequestExtParam is not null");
             return new ResponseEntity<Map>(map, HttpStatus.BAD_REQUEST);
         }
-        final DBCollection finalCollection = collection;
+
         Future<ResponseEntity<Map>> result = service.submit(new Callable<ResponseEntity<Map>>() {
             @Override
             public ResponseEntity<Map> call() throws Exception {
-                Map map = new HashMap();
-
+                Map<String, Object> map = null;
                 if (file == null) {
                     map.put("errormsg", "File is not null");
                     return new ResponseEntity<Map>(map, HttpStatus.BAD_REQUEST);
@@ -102,7 +113,13 @@ public class FileService implements IFileService {
                     temp.put("path", results[1]);
                     temp.put("url", ClientGlobal.getG_base_url_prefixes() + results[1]);
                     temp.put("time", new Date());
-                    finalCollection.save(temp);
+
+                    String ext = (String)(collections.get("ext"));
+                    DBCollection dbCollection = (DBCollection) (collections.get("collection"));
+                    if("mk".equals(ext)){
+                        temp.put("cid", cardid);
+                    }
+                    dbCollection.save(temp);
 
                     return new ResponseEntity<Map>(map, HttpStatus.OK);
                 }catch (Exception e){
