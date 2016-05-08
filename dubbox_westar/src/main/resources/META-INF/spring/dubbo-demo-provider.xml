@@ -25,7 +25,7 @@
     <!--<dubbo:annotation package="com.westar.wangab.api.impl" id="an" />-->
 
     <!--<dubbo:protocol name="rest" port="9908" contextpath="fileApi" server="tomcat" extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter" threads="500" />-->
-    <dubbo:protocol name="rest" port="9909" contextpath="userApi" server="servlet" serialization="kryo" extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter" threads="500" />
+    <dubbo:protocol name="rest" port="9909" contextpath="westar" server="servlet" serialization="kryo" extension="com.alibaba.dubbo.rpc.protocol.rest.support.LoggingFilter" threads="500" />
 
     <dubbo:service interface="com.westar.wangab.api.intf.IUserService" ref="userService" version="1.0.0" validation="true" protocol="rest" />
     <!--<dubbo:service interface="com.westar.wangab.api.intf.IFileService" ref="fileService" version="1.0.0" validation="true" protocol="rest" />-->

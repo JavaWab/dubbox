@@ -86,7 +86,7 @@ public class FileService implements IFileService {
         Future<ResponseEntity<Map>> result = service.submit(new Callable<ResponseEntity<Map>>() {
             @Override
             public ResponseEntity<Map> call() throws Exception {
-                Map<String, Object> map = null;
+                Map<String, Object> map = new HashMap<String, Object>();
                 if (file == null) {
                     map.put("errormsg", "File is not null");
                     return new ResponseEntity<Map>(map, HttpStatus.BAD_REQUEST);
