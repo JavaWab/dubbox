@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
@@ -170,9 +169,11 @@ public class FileService implements IFileService {
         try {
             DBObject temp = new BasicDBObject();
             temp.put("uid", userid);
+            temp.put("group", group);
+            temp.put("path", path);
             collection.remove(temp);
 
-            TrackerGroup trackerGroup = ClientGlobal.getG_tracker_group();
+            TrackerGrup trackerGroup = ClientGlobal.getG_tracker_group();
             TrackerServer trackerServer = trackerGroup.getConnection();
             StorageServer storageServer = null;
 
