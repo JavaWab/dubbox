@@ -6,6 +6,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import com.westar.wangab.api.intf.DeleteParams;
 import com.westar.wangab.api.intf.IFileService;
 import com.westar.wangab.api.intf.RequestExtParam;
 import org.csource.common.NameValuePair;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
@@ -144,8 +146,48 @@ public class FileService implements IFileService {
     }
 
     @Override
-    public boolean deleteFile(String group, String filePathName) {
-        return false;
+    @RequestMapping("/delete")
+    public ResponseEntity<Map> deleteFile(@Validated DeleteParams params) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        DBCollection collection = mongo.getDB("westar").getCollection("ws_user_file");
+        String effect = params.getEffect();
+        String userid = params.getUerid();
+        String group = params.getGroup();
+        String path = params.getFilePath();
+
+        if("mkicon".equals(effect)){
+            collection = mongo.getDB("westar").getCollection("ws_user_mkicon");
+        }else if("mkphoto".equals(effect)){
+            collection = mongo.getDB("westar").getCollection("ws_user_mkphoto");
+        }else if("icon".equals(effect)){
+            collection = mongo.getDB("westar").getCollection("ws_user_icon");
+        }else if("photo".equals(effect)){
+            collection = mongo.getDB("westar").getCollection("ws_user_photo");
+        }else if("file".equals(effect)){
+            collection = mongo.getDB("westar").getCollection("ws_user_file");
+        }
+
+        try {
+            DBObject temp = new BasicDBObject();
+            temp.put("uid", userid);
+            collection.remove(temp);
+
+            TrackerGroup trackerGroup = ClientGlobal.getG_tracker_group();
+            TrackerServer trackerServer = trackerGroup.getConnection();
+            StorageServer storageServer = null;
+
+            StorageClient client = new StorageClient(trackerServer, storageServer);
+            client.delete_file(group, path);
+            map.put("result", true);
+            map.put("retmdg", "success");
+            return new ResponseEntity<Map>(map, HttpStatus.OK);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+            map.put("result", false);
+            map.put("retmsg", e.getMessage());
+            return new ResponseEntity<Map>(map, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 }

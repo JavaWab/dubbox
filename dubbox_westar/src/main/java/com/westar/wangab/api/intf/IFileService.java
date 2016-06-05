@@ -9,6 +9,6 @@ import java.util.Map;
  * Created by wanganbang on 4/19/16.
  */
 public interface IFileService {
-    public boolean deleteFile(String group, String filePathName);
+    public ResponseEntity<Map> deleteFile(DeleteParams params);
     public ResponseEntity<Map> upload(MultipartFile file, RequestExtParam param);
 }
