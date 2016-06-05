@@ -36,10 +36,11 @@ public class FileService implements IFileService {
     private static ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
     @Resource
     private Mongo mongo;
+
     static {
-        try{
+        try {
             ClientGlobal.init(FileService.class.getClassLoader().getResource("fdfs.properties").getPath());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOG.error("FileService init Failed, maybe not fdfs.properties");
             System.exit(1);
@@ -56,29 +57,29 @@ public class FileService implements IFileService {
 
         DBCollection collection = mongo.getDB("westar").getCollection("ws_user_file");
         final Map<String, Object> collections = new HashMap<String, Object>();
-        if(effect != null && userid != null){
-            if("mkicon".equals(effect)){
+        if (effect != null && userid != null) {
+            if ("mkicon".equals(effect)) {
                 collection = mongo.getDB("westar").getCollection("ws_user_mkicon");
                 collections.put("ext", "mk");
                 collections.put("collection", collection);
-            }else if("mkphoto".equals(effect)){
+            } else if ("mkphoto".equals(effect)) {
                 collection = mongo.getDB("westar").getCollection("ws_user_mkphoto");
                 collections.put("ext", "mk");
                 collections.put("collection", collection);
-            }else if("icon".equals(effect)){
+            } else if ("icon".equals(effect)) {
                 collection = mongo.getDB("westar").getCollection("ws_user_icon");
                 collections.put("ext", "usr");
                 collections.put("collection", collection);
-            }else if("photo".equals(effect)){
+            } else if ("photo".equals(effect)) {
                 collection = mongo.getDB("westar").getCollection("ws_user_photo");
                 collections.put("ext", "usr");
                 collections.put("collection", collection);
-            }else if("file".equals(effect)){
+            } else if ("file".equals(effect)) {
                 collection = mongo.getDB("westar").getCollection("ws_user_file");
                 collections.put("ext", "usr");
                 collections.put("collection", collection);
             }
-        }else{
+        } else {
             Map map = new HashMap();
             map.put("errormsg", "RequestExtParam is not null");
             return new ResponseEntity<Map>(map, HttpStatus.BAD_REQUEST);
@@ -92,7 +93,7 @@ public class FileService implements IFileService {
                     map.put("errormsg", "File is not null");
                     return new ResponseEntity<Map>(map, HttpStatus.BAD_REQUEST);
                 }
-                try{
+                try {
                     TrackerGroup trackerGroup = ClientGlobal.getG_tracker_group();
                     TrackerServer trackerServer = trackerGroup.getConnection();
                     StorageServer storageServer = null;
@@ -115,15 +116,15 @@ public class FileService implements IFileService {
                     temp.put("url", ClientGlobal.getG_base_url_prefixes() + results[1]);
                     temp.put("time", new Date());
 
-                    String ext = (String)(collections.get("ext"));
+                    String ext = (String) (collections.get("ext"));
                     DBCollection dbCollection = (DBCollection) (collections.get("collection"));
-                    if("mk".equals(ext)){
+                    if ("mk".equals(ext)) {
                         temp.put("cid", cardid);
                     }
                     dbCollection.save(temp);
 
                     return new ResponseEntity<Map>(map, HttpStatus.OK);
-                }catch (Exception e){
+                } catch (Exception e) {
                     LOG.error(e.getMessage());
                     e.printStackTrace();
                     map.put("errormsg", e.getMessage());
@@ -154,15 +155,15 @@ public class FileService implements IFileService {
         String group = params.getGroup();
         String path = params.getFilePath();
 
-        if("mkicon".equals(effect)){
+        if ("mkicon".equals(effect)) {
             collection = mongo.getDB("westar").getCollection("ws_user_mkicon");
-        }else if("mkphoto".equals(effect)){
+        } else if ("mkphoto".equals(effect)) {
             collection = mongo.getDB("westar").getCollection("ws_user_mkphoto");
-        }else if("icon".equals(effect)){
+        } else if ("icon".equals(effect)) {
             collection = mongo.getDB("westar").getCollection("ws_user_icon");
-        }else if("photo".equals(effect)){
+        } else if ("photo".equals(effect)) {
             collection = mongo.getDB("westar").getCollection("ws_user_photo");
-        }else if("file".equals(effect)){
+        } else if ("file".equals(effect)) {
             collection = mongo.getDB("westar").getCollection("ws_user_file");
         }
 
