@@ -173,7 +173,7 @@ public class FileService implements IFileService {
             temp.put("path", path);
             collection.remove(temp);
 
-            TrackerGrup trackerGroup = ClientGlobal.getG_tracker_group();
+            TrackerGroup trackerGroup = ClientGlobal.getG_tracker_group();
             TrackerServer trackerServer = trackerGroup.getConnection();
             StorageServer storageServer = null;
 
