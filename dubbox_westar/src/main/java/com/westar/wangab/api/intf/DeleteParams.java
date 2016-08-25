@@ -11,12 +11,9 @@ import java.io.Serializable;
 public class DeleteParams implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message = "group is not null")
-    @NotEmpty(message = "group is not null")
-    private String group;
     @NotNull(message = "filePath is not null")
     @NotEmpty(message = "filePath is not null")
-    private String filePath;
+    private String url;
     @NotNull(message = "uerid is not null")
     @NotEmpty(message = "uerid is not null")
     private String uerid;
@@ -24,20 +21,12 @@ public class DeleteParams implements Serializable{
     @NotEmpty(message = "effect is not null")
     private String effect;
 
-    public String getGroup() {
-        return group;
+    public String getUrl() {
+        return url;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUerid() {

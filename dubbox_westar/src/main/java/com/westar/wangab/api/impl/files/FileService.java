@@ -152,8 +152,7 @@ public class FileService implements IFileService {
         DBCollection collection = mongo.getDB("westar").getCollection("ws_user_file");
         String effect = params.getEffect();
         String userid = params.getUerid();
-        String group = params.getGroup();
-        String path = params.getFilePath();
+        String url = params.getUrl();
 
         if ("mkicon".equals(effect)) {
             collection = mongo.getDB("westar").getCollection("ws_user_mkicon");
@@ -170,19 +169,29 @@ public class FileService implements IFileService {
         try {
             DBObject temp = new BasicDBObject();
             temp.put("uid", userid);
-            temp.put("group", group);
-            temp.put("path", path);
-            collection.remove(temp);
+            temp.put("url", url);
+            DBObject result = collection.findOne(temp);
+            LOG.info(result.toString());
+            if (result != null) {
+                TrackerGroup trackerGroup = ClientGlobal.getG_tracker_group();
+                TrackerServer trackerServer = trackerGroup.getConnection();
+                StorageServer storageServer = null;
 
-            TrackerGroup trackerGroup = ClientGlobal.getG_tracker_group();
-            TrackerServer trackerServer = trackerGroup.getConnection();
-            StorageServer storageServer = null;
+                String group = result.get("group").toString();
+                String path = result.get("path").toString();
+                LOG.info("delete file :" + group + "\t" + path);
+                StorageClient client = new StorageClient(trackerServer, storageServer);
+                int n = client.delete_file(group, path);
+                LOG.info("delete result number " + n);
+                map.put("result", true);
+                map.put("retmdg", "success");
+                return new ResponseEntity<Map>(map, HttpStatus.OK);
+            } else {
+                map.put("result", false);
+                map.put("retmdg", "file is not find");
+                return new ResponseEntity<Map>(map, HttpStatus.NOT_FOUND);
+            }
 
-            StorageClient client = new StorageClient(trackerServer, storageServer);
-            client.delete_file(group, path);
-            map.put("result", true);
-            map.put("retmdg", "success");
-            return new ResponseEntity<Map>(map, HttpStatus.OK);
         } catch (Exception e) {
             LOG.error(e.getMessage());
             map.put("result", false);
