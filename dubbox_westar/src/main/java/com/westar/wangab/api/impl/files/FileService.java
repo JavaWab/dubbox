@@ -170,7 +170,7 @@ public class FileService implements IFileService {
             DBObject temp = new BasicDBObject();
             temp.put("uid", userid);
             temp.put("url", url);
-            DBObject result = collection.findOne(temp);
+            DBObject result = collection.findAndRemove(temp);
             LOG.info(result.toString());
             if (result != null) {
                 TrackerGroup trackerGroup = ClientGlobal.getG_tracker_group();
